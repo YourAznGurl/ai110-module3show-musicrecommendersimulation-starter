@@ -2,6 +2,11 @@ import csv  # built-in Python tool for reading CSV files
 from typing import List, Dict, Tuple, Optional
 from dataclasses import dataclass
 
+# Scoring weights: change these numbers to run experiments
+GENRE_WEIGHT = 2.0
+MOOD_WEIGHT = 1.0
+ENERGY_WEIGHT = 1.0
+
 
 @dataclass
 class Song:
@@ -77,20 +82,20 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     score = 0.0     # running total of points
     reasons = []    # plain-language notes explaining the score
 
-    # genre match is worth the most
+    # genre match: worth GENRE_WEIGHT points
     if song["genre"] == user_prefs["genre"]:
-        score += 2.0
-        reasons.append("genre match (+2.0)")
+        score += GENRE_WEIGHT
+        reasons.append(f"genre match (+{GENRE_WEIGHT})")
 
-    # mood match is worth less
+    # mood match: worth MOOD_WEIGHT points
     if song["mood"] == user_prefs["mood"]:
-        score += 1.0
-        reasons.append("mood match (+1.0)")
+        score += MOOD_WEIGHT
+        reasons.append(f"mood match (+{MOOD_WEIGHT})")
 
-    # energy: the closer to the target, the more points (max 1.0)
+    # energy: the closer to the target, the more points
     # abs() turns a negative gap into a positive one
     gap = abs(song["energy"] - user_prefs["energy"])
-    energy_points = 1.0 - gap
+    energy_points = ENERGY_WEIGHT * (1.0 - gap)
     score += energy_points
     reasons.append(f"energy closeness (+{energy_points:.2f})")
 
