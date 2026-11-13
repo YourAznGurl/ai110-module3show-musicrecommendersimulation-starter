@@ -17,17 +17,36 @@ Replace this paragraph with your own summary of what your version does.
 
 ## How The System Works
 
-Explain your design in plain language.
+Real apps like Spotify use two ideas: collaborative filtering (recommending
+what similar users liked) and content-based filtering (recommending songs
+whose attributes are similar to ones you like). My version only uses
+content-based filtering, because I have no other users' data.
 
-Some prompts to answer:
+**What features does each Song use?**
+Each song has genre, mood, energy, tempo, valence, danceability, and
+acousticness. My scoring only uses genre, mood, and energy.
 
-- What features does each `Song` use in your system
-  - For example: genre, mood, energy, tempo
-- What information does your `UserProfile` store
-- How does your `Recommender` compute a score for each song
-- How do you choose which songs to recommend
+**What information does the UserProfile store?**
+A favorite genre, a favorite mood, and a target energy level (0.0 to 1.0).
 
-You can include a simple diagram or bullet list if helpful.
+**How does the Recommender compute a score for each song?**
+- +2.0 points if the song's genre matches
+- +1.0 point if the song's mood matches
+- Up to +1.0 point for energy closeness: 1 - |song energy - target energy|
+
+Every score also comes with a list of reasons, so the user can see why a
+song was picked.
+
+**How do you choose which songs to recommend?**
+The program scores every song in the catalog, sorts them from highest to
+lowest score, and returns the top k.
+
+**Expected bias:** Genre is worth the most points, so a song with the wrong
+genre but a perfect mood and energy can rank below a weaker song in the
+right genre.
+Delete the starter prompts. The “Some prompts to answer” bullets and the “Explain your design” line should be replaced by this text, not kept above it.
+Use your own words. Reword a few sentences so it sounds like you.
+Project Summary still needs a paragraph. At the top of the README, replace “Replace this paragraph with your own summary” with 2-3 sentences about what your version does. For example: “This project is a small content-based music recommender. It scores songs by genre, mood, and energy against a user’s taste profile and returns the top matches with reasons.”
 
 ---
 
